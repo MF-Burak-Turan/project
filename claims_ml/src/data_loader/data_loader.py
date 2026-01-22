@@ -10,7 +10,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-data_reader_functions = {".csv": pd.read_csv, ".parguet": pd.read_parquet}
+data_reader_functions = {".csv": pd.read_csv, 
+                         ".parquet": pd.read_parquet}
 
 
 class DataLoader:
@@ -27,8 +28,8 @@ class DataLoader:
         data: pd.DataFrame = reader_func(file_path)
         
         if data.empty:
-            logger.error(EM.EMPTY_DATA.value)
-            raise ValueError(EM.EMPTY_DATA.value)
+            logger.error(EM.EMPTY_DATA_FILE.value)
+            raise ValueError(EM.EMPTY_DATA_FILE.value)
         
         return data
     
@@ -37,9 +38,9 @@ class DataLoader:
         Validates the file path.
         """
         if not isinstance(file_path, (str, Path)):
-            logger.error(EM.INVALID_FILE_PATH.value.format(type=type(file_path)))
+            logger.error(EM.INVALID_FILE_PATH_TYPE.value.format(type=type(file_path)))
             raise TypeError(
-                EM.INVALID_FILE_PATH.value.format(type=type(file_path))
+                EM.INVALID_FILE_PATH_TYPE.value.format(type=type(file_path))
             )
             
         if not os.path.exists(file_path):
@@ -54,14 +55,14 @@ class DataLoader:
         
         if ext not in SUPPORTED_FILE_EXTENSIONS:
             logger.error(
-                EM.INVALID_FILE_EXTENSION.value.format(
+                EM.EXT_NOT_SUPPORTED.value.format(
                     ext=ext, supported_extensions=SUPPORTED_FILE_EXTENSIONS
                 )
             )
             raise ValueError(
-                EM.INVALID_FILE_EXTENSION.value.format(
+                EM.EXT_NOT_SUPPORTED.value.format(
                     ext=ext, supported_extensions=SUPPORTED_FILE_EXTENSIONS
                 )
             )
                 
-            return ext
+        return ext
